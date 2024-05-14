@@ -15,8 +15,12 @@ const app = express();
 dotenv.config();
 
 async function connectdb() {
-  await mongoose.connect(process.env.MONGO_URL);
-  console.log("connect to database");
+  try {
+    await mongoose.connect(process.env.MONGO_URL);
+    console.log("connect to database");
+  } catch (error) {
+    console.error("Error connecting to database: ", error);
+  }
 }
 
 connectdb();
@@ -30,6 +34,6 @@ app.use(warmRouter);
 app.use(electroRouter);
 app.use(materialRouter);
 
-app.listen("3000", () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log("server running");
 });
